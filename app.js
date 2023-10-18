@@ -1,47 +1,60 @@
-const usuario = 'Carlitos'
-const contrasena = '1234'
-let saldo = 100
+const clientes = []
+const contador = 0
+let usuarioIngresado = ''
+
+//Crear Nuevo Usuario
+function crearUsuario() {
+    class Customer {
+        constructor(nombre, contrasena, saldo) {
+            this.nombre = nombre
+            this.contrasena = contrasena
+            this.saldo = 0
+        }
+    }
+    let usuario = prompt('ingrese su nuevo Nombre de Usuario')
+    let contrasena = prompt('Cree una Contrasena')
+    let saldo = 0
+    const customer = new Customer(usuario, contrasena, saldo)
+    clientes.push(customer)
+
+
+}
 //Validacion usuario
 function usuarioCheck() {
     for (i = 3; i >= 0; i--) {
-        let usuarioIngresado = prompt('ingrese Nombre de Usuario')
+        usuarioIngresado = prompt('ingrese Nombre de Usuario')
+        /*function buscarUsuario(clientes) {
+        return clientes.nombre
+        } */
+        const valUsuario = clientes.findIndex((p) => p.nombre == usuarioIngresado)
+        const valContrasena = clientes.slice(valUsuario, (valUsuario + 1))
         if (i == 0) {
             alert('Usted a superado los intentos permitidos')
             break
 
-        } else if (usuario == usuarioIngresado) {
-
-            contrasenacheck()
-            i = 0
-            break
         } else {
-            let e = i - 1
-            alert(`El usuario ingresado es Incorrecto, le quedan ${e} intentos `)
-        }
+            if (valUsuario == -1) {
+                alert('El usuario ingresado no existe, pruebe de nuevo')
+            } else {
+                contrasenaIngresada = prompt('ingrese su Contrasena')
+                if (valContrasena.contrasena == contrasenaIngresada) {
+                    alert(`Bienvenido senor ${usuarioIngresado}`)
 
+                } else {
+                    alert(valContrasena + 'contrasena incorrecta')
+                }
+
+            }
+
+
+        }
     }
 }
-//Validacion contrasena
-function contrasenacheck() {
-    for (i = 3; i >= 0; i--) {
-        let contrasenaIngresada = prompt('ingrese Contrasena')
-        if (i == 0) {
-            alert('Usted a superado los intentos permitidos')
-            break
 
-        } else if (contrasena == contrasenaIngresada) {
-            alert(`Bienvenido ${usuario}`)
-            i = 0
-            acciones()
-            break
-        } else {
-            let e = i - 1
-            alert(`La contrasena ingresado es Incorrecta, le quedan ${e} intentos `)
-        }
 
-    }
 
-}
+
+
 //opciones de la app una vez validado el usuario.
 function acciones() {
     let opciones = parseInt(prompt('Buen dia, que accion desea realizar hoy? 1-Depositar dinero, 2-Extraer dinero, 3-Consultar Saldo'))
@@ -64,7 +77,7 @@ function acciones() {
 //opcion deposito
 function deposito() {
     let dinero = parseInt(prompt('Caunto dinero quiere Ingresar?'))
-    saldo = saldo + dinero
+    ssaldo = saldo + dinero
     conSaldo()
     deNuevo()
 }
@@ -90,11 +103,27 @@ function deNuevo() {
     if (again == 'si') {
         acciones()
     } else if (again == 'no') {
-        alert(`Muchas Gracias ${nombre} por usar nuestro servicio, hasta pronto!`)
+        alert(`Muchas Gracias ${usuarioIngresado} por usar nuestro servicio, hasta pronto!`)
+        inicio()
+
     }
 
 }
 
-usuarioCheck()
+function inicio() {
+    const estado = prompt('Usted ya tiene un usuario creado? (si/no)')
+    if (estado == 'si') {
+        usuarioCheck()
+    } else {
+        crearUsuario()
+        inicio()
+        usuarioCheck()
+
+    }
+    for (const customer of clientes) {
+        console.log('nombre: ' + customer.nombre)
+    }
+}
+inicio()
 
 
