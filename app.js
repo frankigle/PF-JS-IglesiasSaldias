@@ -1,6 +1,7 @@
 const clientes = []
 const contador = 0
 let usuarioIngresado = ''
+let saldo = 0
 
 //Crear Nuevo Usuario
 function crearUsuario() {
@@ -13,7 +14,6 @@ function crearUsuario() {
     }
     let usuario = prompt('ingrese su nuevo Nombre de Usuario')
     let contrasena = prompt('Cree una Contrasena')
-    let saldo = 0
     const customer = new Customer(usuario, contrasena, saldo)
     clientes.push(customer)
 
@@ -27,7 +27,7 @@ function usuarioCheck() {
         return clientes.nombre
         } */
         const valUsuario = clientes.findIndex((p) => p.nombre == usuarioIngresado)
-        const valContrasena = clientes.slice(valUsuario, (valUsuario + 1))
+
         if (i == 0) {
             alert('Usted a superado los intentos permitidos')
             break
@@ -35,14 +35,21 @@ function usuarioCheck() {
         } else {
             if (valUsuario == -1) {
                 alert('El usuario ingresado no existe, pruebe de nuevo')
+                break
             } else {
-                contrasenaIngresada = prompt('ingrese su Contrasena')
-                if (valContrasena.contrasena == contrasenaIngresada) {
-                    alert(`Bienvenido senor ${usuarioIngresado}`)
+                for (e = 3; e >= 0; e--) {
+                    const valContrasena = clientes[valUsuario].contrasena
+                    contrasenaIngresada = prompt('ingrese su Contrasena')
+                    if (valContrasena == contrasenaIngresada) {
+                        alert(`Bienvenido senor ${usuarioIngresado}`)
+                        break
 
-                } else {
-                    alert(valContrasena + 'contrasena incorrecta')
+                    } else {
+                        alert('contrasena incorrecta')
+
+                    }
                 }
+                break
 
             }
 
@@ -77,7 +84,7 @@ function acciones() {
 //opcion deposito
 function deposito() {
     let dinero = parseInt(prompt('Caunto dinero quiere Ingresar?'))
-    ssaldo = saldo + dinero
+    saldo = saldo + dinero
     conSaldo()
     deNuevo()
 }
@@ -114,11 +121,11 @@ function inicio() {
     const estado = prompt('Usted ya tiene un usuario creado? (si/no)')
     if (estado == 'si') {
         usuarioCheck()
+        acciones()
     } else {
         crearUsuario()
         inicio()
-        usuarioCheck()
-
+        acciones()
     }
     for (const customer of clientes) {
         console.log('nombre: ' + customer.nombre)
