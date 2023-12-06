@@ -1,14 +1,21 @@
 const p50 = 120
 const p100 = 150
-carrito = []
+const carrito = []
+const accum = 0
+const elementosOpc = [
+    { prop: 'elem', id: 'a', elemento: 'Roof Rack', precio: 15, img: './Pictures/surfRack.jpg' },
+    { prop: 'elem', id: 'b', elemento: 'Baulera', precio: 15, img: './' },
+    { prop: 'elem', id: 'c', elemento: 'Phone Holder', precio: 5, img: './' },
+    { prop: 'elem', id: 'd', elemento: 'Casco', precio: 0, img: './' }
+]
 const scooters = [
-    { id: '1', modelo: 'black', marca: 'Sym', cc: 50, precio: p50, img: './Pictures/symBlack.jpg', info: ['Surf Rack disponible', 'Baulera disponible', 'Casco incluido'] },
-    { id: '2', modelo: 'lead', marca: 'Honda', cc: 50, precio: p50, img: './Pictures/honda.jpg', info: ['Surf Rack disponible', 'Baulera disponible', 'Casco incluido'] },
-    { id: '3', modelo: 'Sicilian Lemon', marca: 'some', cc: 50, precio: p50, img: './Pictures/sicilianLemon.jpg', info: ['Surf Rack disponible', 'Baulera disponible', 'Casco incluido'] },
-    { id: '4', modelo: 'Blanca', marca: 'Aprilia', cc: 100, precio: p100, img: './Pictures/apriliaWhite.jpg', info: ['Surf Rack disponible', 'Baulera disponible', 'Casco y Porta celular disponible'] },
-    { id: '5', modelo: 'luxury', marca: 'Vespa', cc: 100, precio: p100, img: './Pictures/57__30300.1570097252.jpg', info: ['Surf Rack disponible', 'Baulera disponible', 'Casco y Porta celular disponible'] },
-    { id: '6', modelo: 'biz', marca: 'Honda', cc: 100, precio: p100, img: './Pictures/images.jpeg', info: ['Surf Rack disponible', 'Baulera No Disponible', 'Casco y Porta celular disponible'] },
-    { id: '7', modelo: 'Vespa Europa', marca: 'Vespa', cc: 100, precio: p100, img: './Pictures/vespa.jpeg', info: ['Surf Rack disponible', 'Baulera No Disponible', 'Casco y Porta celular disponible'] }
+    { id: '1', modelo: 'black', marca: 'Sym', cc: 50, precio: p50, img: './Pictures/symBlack.jpg', info: [elementosOpc[0].elemento, elementosOpc[1].elemento, elementosOpc[2].elemento] },
+    { id: '2', modelo: 'lead', marca: 'Honda', cc: 50, precio: p50, img: './Pictures/honda.jpg', info: [elementosOpc[0].elemento, elementosOpc[1].elemento, elementosOpc[2].elemento] },
+    { id: '3', modelo: 'Sicilian Lemon', marca: 'some', cc: 50, precio: p50, img: './Pictures/sicilianLemon.jpg', info: [elementosOpc[0].elemento, elementosOpc[1].elemento, elementosOpc[2].elemento] },
+    { id: '4', modelo: 'Blanca', marca: 'Aprilia', cc: 100, precio: p100, img: './Pictures/apriliaWhite.jpg', info: [elementosOpc[3].elemento, elementosOpc[1].elemento, elementosOpc[2].elemento] },
+    { id: '5', modelo: 'luxury', marca: 'Vespa', cc: 100, precio: p100, img: './Pictures/57__30300.1570097252.jpg', info: [elementosOpc[3].elemento, elementosOpc[1].elemento, elementosOpc[2].elemento] },
+    { id: '6', modelo: 'biz', marca: 'Honda', cc: 100, precio: p100, img: './Pictures/images.jpeg', info: [elementosOpc[3].elemento, elementosOpc[1].elemento, elementosOpc[2].elemento] },
+    { id: '7', modelo: 'Vespa Europa', marca: 'Vespa', cc: 100, precio: p100, img: './Pictures/vespa.jpeg', info: [elementosOpc[3].elemento, elementosOpc[1].elemento, elementosOpc[2].elemento] }
 ]
 const scootersJson = JSON.stringify(scooters)
 localStorage.setItem('scooters', scootersJson)
@@ -86,31 +93,89 @@ function crearTarjeta(parametro) {
                 <li>${x.info[2]}</li>
             </ul>
             <p>$${x.precio}</p>
-            <button id='${x.id}' class='boton btn btn-success'>Alquilar</button>`;
+            <button id='${x.id}' class='botonCard btn btn-success'>Alquilar</button>`;
         tituloTarjeta.className = 'tarjeta'
         gridFotos.appendChild(tituloTarjeta)
         main.appendChild(gridFotos)
     }
-    const botn = document.querySelectorAll('.boton')
+    const botn = document.querySelectorAll('.botonCard')
     for (var i = 0; i < botn.length; i++) {
-        botn[i].addEventListener('click', () => {
-            const opciones = document.createElement('div')
-            opciones.classList.add('agregados')
-            gridFotos.innerHTML = ''
+        botn[i].addEventListener('click', addCarritoScooter)
 
-            opciones.innerHTML = `
-            <h3>Seleccione las Siguientes Opciones</h3>
-            <p>Surf Rack</p>
-            <button class="surfRack">agregar</button>
-            <p>Baulera</p>
-            <button class="baulera">agregar</button>
-            <p>Phone Holder</p>
-            <button class="phoneHolder">agregar</button>
-            `
-            gridFotos.appendChild(opciones)
-        });
+        botn[i].addEventListener('click', agregarOpciones)
+
+
+
+    }
+
+}
+
+function addCarritoScooter(event) {
+    const button = event.target;
+    const idCart = button.id
+    const cart = scooters.find((x) => x.id == idCart)
+
+    carrito.push(cart)
+    console.log(carrito)
+}
+function addCarritoOpciones(event) {
+    const button = event.target;
+    const idCart = button.id
+    const cart = elementosOpc.find((x) => x.id == idCart)
+    carrito.push(cart)
+    //mostrarCarrito()
+    console.log(carrito)
+
+}
+function agregarOpciones(event) {
+
+    const opciones = document.createElement('div')
+    opciones.classList.add('agregados')
+    gridFotos.innerHTML = ''
+
+    opciones.innerHTML = `
+        <h3>Seleccione las Siguientes Opciones</h3>
+        <p>Surf Rack</p>
+        <button id='a'class="btn btn-success botonOpc">agregar</button>
+        <p>Baulera</p>
+        <button id='b'class="btn btn-success botonOpc">agregar</button>
+        <p>Phone Holder</p>
+        <button id='c'class="btn btn-success botonOpc">agregar</button>
+        <p>Mostrar Carrito</p>
+        <button id='c'class="btn btn-success showCar">Mostrar</button>
+        `
+    gridFotos.appendChild(opciones)
+    const botn = document.querySelectorAll('.botonOpc')
+    const mostrar = document.querySelectorAll('.showCar')
+    for (var i = 0; i < botn.length; i++) {
+        botn[i].addEventListener('click', addCarritoOpciones)
+        mostrar.addEventListener('click', mostrarCarrito)
     }
 }
+
+function obtenerObjeto(idCart) {
+    const cart = scooters.find((x) => x.id == idCart)
+
+    carrito.push(cart)
+}
+function mostrarCarrito() {
+    const car = document.createElement('div')
+    car.classList.add('car')
+    for (let x of carrito) {
+        car.innerHTML = `
+        <h2>Moto</h2>
+        <p>${x.modelo}</p>
+        <img id='imgTarj' src="${x.img}" alt="${x.modelo}">
+        <p>${x.elemento}</p>
+        
+        
+        <p>$${x.precio}</p>`
+        main.appendChild(car)
+        // main.appendChild(gridFotos)
+    }
+
+}
+/* */
 /* ingresarUsuario()
 function ingresarUsuario() {
     const form = document.createElement('div')
